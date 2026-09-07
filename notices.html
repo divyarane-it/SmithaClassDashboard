@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Notices | Smitha Classes</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+<style>
+
+.page-content {
+padding:30px;
+}
+
+.page-title {
+display:flex;
+justify-content:space-between;
+margin-bottom:30px;
+}
+
+.notice-grid {
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:20px;
+}
+
+.big-notice {
+background:white;
+padding:25px;
+border-radius:15px;
+border-left:5px solid #4f46e5;
+}
+
+.big-notice i {
+font-size:25px;
+color:#4f46e5;
+}
+
+.big-notice h3 {
+margin:15px 0 8px;
+}
+
+.big-notice p {
+color:#6b7280;
+line-height:1.6;
+}
+
+.big-notice small {
+display:block;
+margin-top:15px;
+color:#9ca3af;
+}
+
+@media(max-width:700px) {
+.notice-grid {
+grid-template-columns:1fr;
+}
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<aside class="sidebar" id="sidebar">
+
+<div class="dashboard-logo">
+<i class="fa-solid fa-graduation-cap"></i>
+<span>Smitha Classes</span>
+</div>
+
+<div class="menu-title">MAIN MENU</div>
+
+<a href="dashboard.html">
+<i class="fa-solid fa-house"></i> Dashboard
+</a>
+
+<a href="students.html">
+<i class="fa-solid fa-users"></i> Students
+</a>
+
+<a href="teachers.html">
+<i class="fa-solid fa-chalkboard-user"></i> Teachers
+</a>
+
+<a href="classes.html">
+<i class="fa-solid fa-book"></i> Classes
+</a>
+
+<a href="attendance.html">
+<i class="fa-solid fa-calendar-check"></i> Attendance
+</a>
+
+<a href="results.html">
+<i class="fa-solid fa-chart-column"></i> Results
+</a>
+
+<a href="fees.html">
+<i class="fa-solid fa-money-bill"></i> Fees
+</a>
+
+<a href="notices.html" class="active">
+<i class="fa-solid fa-bullhorn"></i> Notices
+</a>
+
+<div class="menu-title">SYSTEM</div>
+
+<a href="contact.html">
+<i class="fa-solid fa-address-book"></i> Contact
+</a>
+
+<button onclick="logout()" class="logout-btn">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</button>
+
+</aside>
+
+
+<div class="main-content">
+
+<header class="topbar">
+
+<button onclick="toggleSidebar()" class="sidebar-toggle">
+<i class="fa-solid fa-bars"></i>
+</button>
+
+<div class="search">
+<i class="fa-solid fa-search"></i>
+<input type="text" placeholder="Search notices...">
+</div>
+
+<div class="profile">
+<div class="profile-avatar">A</div>
+<div>
+<strong>Admin</strong>
+<small>Administrator</small>
+</div>
+</div>
+
+</header>
+
+
+<main class="page-content">
+
+<div class="page-title">
+
+<div>
+<h1>Notices & Announcements</h1>
+<p>Important updates for students and parents.</p>
+</div>
+
+</div>
+
+
+<div class="notice-grid">
+
+
+<div class="big-notice">
+
+<i class="fa-solid fa-calendar-days"></i>
+
+<h3>Unit Test - September</h3>
+
+<p>
+Unit tests for all classes will begin from
+10th September 2026. Students are requested
+to prepare according to the examination schedule.
+</p>
+
+<small>
+<i class="fa-regular fa-clock"></i>
+September 3, 2026
+</small>
+
+</div>
+
+
+<div class="big-notice">
+
+<i class="fa-solid fa-people-group"></i>
+
+<h3>Parent-Teacher Meeting</h3>
+
+<p>
+The parent-teacher meeting will be conducted
+on Saturday. Parents are requested to attend
+and discuss their child's academic progress.
+</p>
+
+<small>
+September 2, 2026
+</small>
+
+</div>
+
+
+<div class="big-notice">
+
+<i class="fa-solid fa-trophy"></i>
+
+<h3>Annual Sports Day</h3>
+
+<p>
+Registration for the Annual Sports Day is now open.
+Students interested in participating should contact
+their class teacher.
+</p>
+
+<small>
+September 1, 2026
+</small>
+
+</div>
+
+
+<div class="big-notice">
+
+<i class="fa-solid fa-book-open"></i>
+
+<h3>New Study Material</h3>
+
+<p>
+Updated study materials for Grade 8 to Grade 10
+are now available. Students can collect them
+from their respective teachers.
+</p>
+
+<small>
+August 30, 2026
+</small>
+
+</div>
+
+
+</div>
+
+</main>
+
+</div>
+
+
+<script>
+
+function toggleSidebar(){
+document.getElementById("sidebar").classList.toggle("show");
+}
+
+function logout(){
+localStorage.removeItem("loggedIn");
+window.location.href="login.html";
+}
+
+</script>
+
+</body>
+</html>

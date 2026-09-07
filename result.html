@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Results | Smitha Classes</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+<style>
+
+.page-content {
+padding:30px;
+}
+
+.page-title {
+margin-bottom:30px;
+}
+
+.result-card {
+background:white;
+padding:25px;
+border-radius:15px;
+}
+
+.marks {
+font-weight:800;
+color:#4f46e5;
+}
+
+.excellent {
+color:#16a34a;
+font-weight:700;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<aside class="sidebar" id="sidebar">
+
+<div class="dashboard-logo">
+<i class="fa-solid fa-graduation-cap"></i>
+<span>Smitha Classes</span>
+</div>
+
+<div class="menu-title">MAIN MENU</div>
+
+<a href="dashboard.html">
+<i class="fa-solid fa-house"></i> Dashboard
+</a>
+
+<a href="students.html">
+<i class="fa-solid fa-users"></i> Students
+</a>
+
+<a href="teachers.html">
+<i class="fa-solid fa-chalkboard-user"></i> Teachers
+</a>
+
+<a href="classes.html">
+<i class="fa-solid fa-book"></i> Classes
+</a>
+
+<a href="attendance.html">
+<i class="fa-solid fa-calendar-check"></i> Attendance
+</a>
+
+<a href="results.html" class="active">
+<i class="fa-solid fa-chart-column"></i> Results
+</a>
+
+<a href="fees.html">
+<i class="fa-solid fa-money-bill"></i> Fees
+</a>
+
+<a href="notices.html">
+<i class="fa-solid fa-bullhorn"></i> Notices
+</a>
+
+<div class="menu-title">SYSTEM</div>
+
+<a href="contact.html">
+<i class="fa-solid fa-address-book"></i> Contact
+</a>
+
+<button onclick="logout()" class="logout-btn">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</button>
+
+</aside>
+
+
+<div class="main-content">
+
+<header class="topbar">
+
+<button onclick="toggleSidebar()" class="sidebar-toggle">
+<i class="fa-solid fa-bars"></i>
+</button>
+
+<div class="search">
+<i class="fa-solid fa-search"></i>
+<input type="text" placeholder="Search results...">
+</div>
+
+<div class="profile">
+<div class="profile-avatar">A</div>
+<div>
+<strong>Admin</strong>
+<small>Administrator</small>
+</div>
+</div>
+
+</header>
+
+
+<main class="page-content">
+
+<div class="page-title">
+
+<h1>Results</h1>
+
+<p>
+View and manage student academic performance.
+</p>
+
+</div>
+
+
+<div class="result-card">
+
+<div class="card-header">
+
+<div>
+<h3>Term 1 Results</h3>
+<p>Academic Year 2026-27</p>
+</div>
+
+<select>
+
+<option>All Classes</option>
+<option>Grade 8</option>
+<option>Grade 9</option>
+<option>Grade 10</option>
+
+</select>
+
+</div>
+
+
+<div class="table-responsive">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Student</th>
+<th>Class</th>
+<th>Mathematics</th>
+<th>Science</th>
+<th>English</th>
+<th>Total</th>
+<th>Grade</th>
+</tr>
+
+</thead>
+
+
+<tbody>
+
+<tr>
+<td>Aarav Rao</td>
+<td>Grade 8</td>
+<td class="marks">92</td>
+<td class="marks">88</td>
+<td class="marks">90</td>
+<td>270/300</td>
+<td class="excellent">A+</td>
+</tr>
+
+<tr>
+<td>Priya Shah</td>
+<td>Grade 10</td>
+<td class="marks">95</td>
+<td class="marks">93</td>
+<td class="marks">91</td>
+<td>279/300</td>
+<td class="excellent">A+</td>
+</tr>
+
+<tr>
+<td>Vihaan Kulkarni</td>
+<td>Grade 6</td>
+<td class="marks">78</td>
+<td class="marks">82</td>
+<td class="marks">80</td>
+<td>240/300</td>
+<td class="excellent">A</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</main>
+
+</div>
+
+
+<script>
+
+function toggleSidebar(){
+document.getElementById("sidebar").classList.toggle("show");
+}
+
+function logout(){
+localStorage.removeItem("loggedIn");
+window.location.href="login.html";
+}
+
+</script>
+
+</body>
+</html>

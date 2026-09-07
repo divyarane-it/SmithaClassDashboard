@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teachers | Smitha Classes</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+<style>
+
+.page-content {
+    padding: 30px;
+}
+
+.page-title {
+    margin-bottom: 30px;
+}
+
+.teacher-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+}
+
+.teacher-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 3px 15px rgba(0,0,0,.04);
+}
+
+.teacher-avatar {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    background: #e0e7ff;
+    color: #4338ca;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.teacher-card h3 {
+    margin: 15px 0 5px;
+}
+
+.teacher-card span {
+    color: #4f46e5;
+    font-size: 14px;
+}
+
+.teacher-card p {
+    color: #6b7280;
+    margin-top: 10px;
+}
+
+@media(max-width:900px) {
+    .teacher-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media(max-width:600px) {
+    .teacher-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<aside class="sidebar" id="sidebar">
+
+<div class="dashboard-logo">
+<i class="fa-solid fa-graduation-cap"></i>
+<span>Smitha Classes</span>
+</div>
+
+<div class="menu-title">MAIN MENU</div>
+
+<a href="dashboard.html">
+<i class="fa-solid fa-house"></i> Dashboard
+</a>
+
+<a href="students.html">
+<i class="fa-solid fa-users"></i> Students
+</a>
+
+<a href="teachers.html" class="active">
+<i class="fa-solid fa-chalkboard-user"></i> Teachers
+</a>
+
+<a href="classes.html">
+<i class="fa-solid fa-book"></i> Classes
+</a>
+
+<a href="attendance.html">
+<i class="fa-solid fa-calendar-check"></i> Attendance
+</a>
+
+<a href="results.html">
+<i class="fa-solid fa-chart-column"></i> Results
+</a>
+
+<a href="fees.html">
+<i class="fa-solid fa-money-bill"></i> Fees
+</a>
+
+<a href="notices.html">
+<i class="fa-solid fa-bullhorn"></i> Notices
+</a>
+
+<div class="menu-title">SYSTEM</div>
+
+<a href="contact.html">
+<i class="fa-solid fa-address-book"></i> Contact
+</a>
+
+<button onclick="logout()" class="logout-btn">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</button>
+
+</aside>
+
+
+<div class="main-content">
+
+<header class="topbar">
+
+<button onclick="toggleSidebar()" class="sidebar-toggle">
+<i class="fa-solid fa-bars"></i>
+</button>
+
+<div class="search">
+<i class="fa-solid fa-search"></i>
+<input type="text" placeholder="Search...">
+</div>
+
+<div class="profile">
+<div class="profile-avatar">A</div>
+<div>
+<strong>Admin</strong>
+<small>Administrator</small>
+</div>
+</div>
+
+</header>
+
+
+<main class="page-content">
+
+<div class="page-title">
+
+<h1>Teachers</h1>
+
+<p>
+Meet our experienced teaching team.
+</p>
+
+</div>
+
+
+<div class="teacher-grid">
+
+
+<div class="teacher-card">
+
+<div class="teacher-avatar">
+SU
+</div>
+
+<h3>Smitha Udhayan</h3>
+
+<span>Founder & Proprietor</span>
+
+<p>
+M.Com, M.Ed.
+</p>
+
+</div>
+
+
+<div class="teacher-card">
+
+<div class="teacher-avatar">
+AR
+</div>
+
+<h3>Anita Rao</h3>
+
+<span>Mathematics Teacher</span>
+
+<p>
+Primary & Secondary
+</p>
+
+</div>
+
+
+<div class="teacher-card">
+
+<div class="teacher-avatar">
+PS
+</div>
+
+<h3>Priya Sharma</h3>
+
+<span>Science Teacher</span>
+
+<p>
+Grades 6 - 10
+</p>
+
+</div>
+
+
+<div class="teacher-card">
+
+<div class="teacher-avatar">
+RK
+</div>
+
+<h3>Rahul Kulkarni</h3>
+
+<span>English Teacher</span>
+
+<p>
+Grades 5 - 10
+</p>
+
+</div>
+
+
+<div class="teacher-card">
+
+<div class="teacher-avatar">
+MP
+</div>
+
+<h3>Meena Patil</h3>
+
+<span>Primary Teacher</span>
+
+<p>
+Grades 1 - 5
+</p>
+
+</div>
+
+
+<div class="teacher-card">
+
+<div class="teacher-avatar">
+AS
+</div>
+
+<h3>Akshay Shah</h3>
+
+<span>Social Studies</span>
+
+<p>
+Grades 6 - 10
+</p>
+
+</div>
+
+
+</div>
+
+</main>
+
+</div>
+
+
+<script>
+
+function toggleSidebar() {
+document.getElementById("sidebar").classList.toggle("show");
+}
+
+function logout() {
+localStorage.removeItem("loggedIn");
+window.location.href = "login.html";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Classes | Smitha Classes</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+<style>
+
+.page-content {
+padding:30px;
+}
+
+.page-title {
+margin-bottom:30px;
+}
+
+.class-grid {
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+}
+
+.class-card {
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 3px 15px rgba(0,0,0,.05);
+}
+
+.class-icon {
+width:50px;
+height:50px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#eef2ff;
+color:#4f46e5;
+border-radius:12px;
+font-size:20px;
+margin-bottom:15px;
+}
+
+.class-card h3 {
+font-size:22px;
+}
+
+.class-card p {
+color:#6b7280;
+margin-top:7px;
+}
+
+.class-card button {
+margin-top:20px;
+border:none;
+background:#eef2ff;
+color:#4338ca;
+padding:9px 15px;
+border-radius:8px;
+cursor:pointer;
+}
+
+@media(max-width:1000px) {
+.class-grid {
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+@media(max-width:600px) {
+.class-grid {
+grid-template-columns:1fr;
+}
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<aside class="sidebar" id="sidebar">
+
+<div class="dashboard-logo">
+<i class="fa-solid fa-graduation-cap"></i>
+<span>Smitha Classes</span>
+</div>
+
+<div class="menu-title">MAIN MENU</div>
+
+<a href="dashboard.html">
+<i class="fa-solid fa-house"></i> Dashboard
+</a>
+
+<a href="students.html">
+<i class="fa-solid fa-users"></i> Students
+</a>
+
+<a href="teachers.html">
+<i class="fa-solid fa-chalkboard-user"></i> Teachers
+</a>
+
+<a href="classes.html" class="active">
+<i class="fa-solid fa-book"></i> Classes
+</a>
+
+<a href="attendance.html">
+<i class="fa-solid fa-calendar-check"></i> Attendance
+</a>
+
+<a href="results.html">
+<i class="fa-solid fa-chart-column"></i> Results
+</a>
+
+<a href="fees.html">
+<i class="fa-solid fa-money-bill"></i> Fees
+</a>
+
+<a href="notices.html">
+<i class="fa-solid fa-bullhorn"></i> Notices
+</a>
+
+<div class="menu-title">SYSTEM</div>
+
+<a href="contact.html">
+<i class="fa-solid fa-address-book"></i> Contact
+</a>
+
+<button onclick="logout()" class="logout-btn">
+<i class="fa-solid fa-right-from-bracket"></i>
+Logout
+</button>
+
+</aside>
+
+
+<div class="main-content">
+
+<header class="topbar">
+
+<button onclick="toggleSidebar()" class="sidebar-toggle">
+<i class="fa-solid fa-bars"></i>
+</button>
+
+<div class="search">
+<i class="fa-solid fa-search"></i>
+<input type="text" placeholder="Search classes...">
+</div>
+
+<div class="profile">
+<div class="profile-avatar">A</div>
+<div>
+<strong>Admin</strong>
+<small>Administrator</small>
+</div>
+</div>
+
+</header>
+
+
+<main class="page-content">
+
+<div class="page-title">
+
+<h1>Classes</h1>
+
+<p>
+Manage all classes and academic groups.
+</p>
+
+</div>
+
+
+<div class="class-grid">
+
+
+<script>
+
+const classes = [
+"Jr. KG",
+"Sr. KG",
+"Grade 1",
+"Grade 2",
+"Grade 3",
+"Grade 4",
+"Grade 5",
+"Grade 6",
+"Grade 7",
+"Grade 8",
+"Grade 9",
+"Grade 10"
+];
+
+classes.forEach((className,index)=>{
+
+document.write(`
+
+<div class="class-card">
+
+<div class="class-icon">
+<i class="fa-solid fa-book-open"></i>
+</div>
+
+<h3>${className}</h3>
+
+<p>
+${index < 2 ? "Pre-Primary" :
+ index < 7 ? "Primary School" :
+ "Secondary School"}
+</p>
+
+<button onclick="viewClass('${className}')">
+View Class
+</button>
+
+</div>
+
+`);
+
+});
+
+</script>
+
+
+</div>
+
+</main>
+
+</div>
+
+
+<script>
+
+function toggleSidebar(){
+document.getElementById("sidebar").classList.toggle("show");
+}
+
+function logout(){
+localStorage.removeItem("loggedIn");
+window.location.href="login.html";
+}
+
+function viewClass(name){
+alert("Opening " + name + " details...");
+}
+
+</script>
+
+</body>
+</html>

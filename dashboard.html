@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard | Smitha Classes</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+</head>
+
+
+<body>
+
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="dashboard-logo">
+
+        <i class="fa-solid fa-graduation-cap"></i>
+
+        <span>Smitha Classes</span>
+
+    </div>
+
+
+    <div class="menu-title">
+        MAIN MENU
+    </div>
+
+
+    <a href="dashboard.html" class="active">
+        <i class="fa-solid fa-house"></i>
+        Dashboard
+    </a>
+
+    <a href="students.html">
+        <i class="fa-solid fa-users"></i>
+        Students
+    </a>
+
+    <a href="teachers.html">
+        <i class="fa-solid fa-chalkboard-user"></i>
+        Teachers
+    </a>
+
+    <a href="classes.html">
+        <i class="fa-solid fa-book"></i>
+        Classes
+    </a>
+
+    <a href="attendance.html">
+        <i class="fa-solid fa-calendar-check"></i>
+        Attendance
+    </a>
+
+    <a href="results.html">
+        <i class="fa-solid fa-chart-column"></i>
+        Results
+    </a>
+
+    <a href="fees.html">
+        <i class="fa-solid fa-money-bill"></i>
+        Fees
+    </a>
+
+    <a href="notices.html">
+        <i class="fa-solid fa-bullhorn"></i>
+        Notices
+    </a>
+
+
+    <div class="menu-title">
+        SYSTEM
+    </div>
+
+    <a href="contact.html">
+        <i class="fa-solid fa-address-book"></i>
+        Contact
+    </a>
+
+    <button onclick="logout()" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+    </button>
+
+</aside>
+
+
+
+<!-- MAIN -->
+
+<div class="main-content">
+
+
+    <!-- TOPBAR -->
+
+    <header class="topbar">
+
+        <button onclick="toggleSidebar()" class="sidebar-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+
+        <div class="search">
+
+            <i class="fa-solid fa-search"></i>
+
+            <input
+                type="text"
+                placeholder="Search anything...">
+
+        </div>
+
+
+        <div class="top-actions">
+
+            <button class="notification">
+                <i class="fa-solid fa-bell"></i>
+                <span>3</span>
+            </button>
+
+
+            <div class="profile">
+
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div>
+
+                    <strong>Admin</strong>
+
+                    <small>Administrator</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- DASHBOARD CONTENT -->
+
+    <main class="dashboard-container">
+
+
+        <div class="welcome">
+
+            <div>
+
+                <span>Thursday, September 3, 2026</span>
+
+                <h1>
+                    Good Afternoon, Admin! 👋
+                </h1>
+
+                <p>
+                    Here's what's happening at Smitha Classes today.
+                </p>
+
+            </div>
+
+            <button onclick="window.print()" class="print-btn">
+                <i class="fa-solid fa-print"></i>
+                Print Report
+            </button>
+
+        </div>
+
+
+
+        <!-- STAT CARDS -->
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon purple">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <div>
+
+                    <span>Total Students</span>
+
+                    <h2>250</h2>
+
+                    <small class="positive">
+                        <i class="fa-solid fa-arrow-up"></i>
+                        12% this month
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon blue">
+                    <i class="fa-solid fa-chalkboard-user"></i>
+                </div>
+
+                <div>
+
+                    <span>Total Teachers</span>
+
+                    <h2>18</h2>
+
+                    <small class="positive">
+                        2 new teachers
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+
+                <div>
+
+                    <span>Attendance</span>
+
+                    <h2>92%</h2>
+
+                    <small class="positive">
+                        <i class="fa-solid fa-arrow-up"></i>
+                        3.2%
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon orange">
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                </div>
+
+                <div>
+
+                    <span>Fee Collection</span>
+
+                    <h2>₹4.8L</h2>
+
+                    <small class="positive">
+                        86% collected
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CHARTS -->
+
+        <div class="charts-grid">
+
+
+            <div class="dashboard-card chart-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Student Performance</h3>
+                        <p>Monthly academic overview</p>
+                    </div>
+
+                    <select>
+                        <option>2026</option>
+                        <option>2025</option>
+                    </select>
+
+                </div>
+
+                <canvas id="performanceChart"></canvas>
+
+            </div>
+
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Attendance</h3>
+                        <p>Current month</p>
+                    </div>
+
+                </div>
+
+                <canvas id="attendanceChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- BOTTOM GRID -->
+
+        <div class="bottom-grid">
+
+
+            <!-- RECENT STUDENTS -->
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Recent Students</h3>
+                        <p>Recently registered students</p>
+                    </div>
+
+                    <a href="students.html">
+                        View All
+                    </a>
+
+                </div>
+
+
+                <div class="table-responsive">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Student</th>
+                                <th>Class</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>
+                                    <div class="student-cell">
+
+                                        <div class="table-avatar">
+                                            AR
+                                        </div>
+
+                                        <div>
+                                            <strong>Aarav Rao</strong>
+                                            <small>STU001</small>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>Grade 8</td>
+
+                                <td>
+                                    <span class="status active-status">
+                                        Active
+                                    </span>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <div class="student-cell">
+
+                                        <div class="table-avatar">
+                                            PS
+                                        </div>
+
+                                        <div>
+                                            <strong>Priya Shah</strong>
+                                            <small>STU002</small>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>Grade 10</td>
+
+                                <td>
+                                    <span class="status active-status">
+                                        Active
+                                    </span>
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    <div class="student-cell">
+
+                                        <div class="table-avatar">
+                                            VK
+                                        </div>
+
+                                        <div>
+                                            <strong>Vihaan Kulkarni</strong>
+                                            <small>STU003</small>
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>Grade 6</td>
+
+                                <td>
+                                    <span class="status pending-status">
+                                        Pending
+                                    </span>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NOTICES -->
+
+            <div class="dashboard-card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Recent Notices</h3>
+                        <p>Latest announcements</p>
+                    </div>
+
+                    <a href="notices.html">
+                        View All
+                    </a>
+
+                </div>
+
+
+                <div class="notice-list">
+
+
+                    <div class="notice-item">
+
+                        <div class="notice-icon">
+                            <i class="fa-solid fa-calendar"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>Unit Test - September</strong>
+
+                            <p>
+                                Unit tests begin from 10th September.
+                            </p>
+
+                            <small>Today</small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="notice-item">
+
+                        <div class="notice-icon">
+                            <i class="fa-solid fa-trophy"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>Annual Sports Day</strong>
+
+                            <p>
+                                Registration is now open.
+                            </p>
+
+                            <small>Yesterday</small>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="notice-item">
+
+                        <div class="notice-icon">
+                            <i class="fa-solid fa-book"></i>
+                        </div>
+
+                        <div>
+
+                            <strong>Parent Meeting</strong>
+
+                            <p>
+                                Parent-teacher meeting on Saturday.
+                            </p>
+
+                            <small>2 days ago</small>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>

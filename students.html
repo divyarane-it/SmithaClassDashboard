@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Students | Smitha Classes</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+<style>
+
+.page-content {
+    padding: 30px;
+}
+
+.page-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.page-title h1 {
+    font-size: 30px;
+}
+
+.add-btn {
+    border: none;
+    background: #4f46e5;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.page-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.filter-bar {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.filter-bar input,
+.filter-bar select {
+    padding: 11px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+@media(max-width:600px) {
+    .page-content {
+        padding: 20px 15px;
+    }
+
+    .page-title {
+        align-items: flex-start;
+        gap: 15px;
+        flex-direction: column;
+    }
+
+    .filter-bar {
+        flex-direction: column;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="dashboard-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Smitha Classes</span>
+    </div>
+
+    <div class="menu-title">MAIN MENU</div>
+
+    <a href="dashboard.html">
+        <i class="fa-solid fa-house"></i> Dashboard
+    </a>
+
+    <a href="students.html" class="active">
+        <i class="fa-solid fa-users"></i> Students
+    </a>
+
+    <a href="teachers.html">
+        <i class="fa-solid fa-chalkboard-user"></i> Teachers
+    </a>
+
+    <a href="classes.html">
+        <i class="fa-solid fa-book"></i> Classes
+    </a>
+
+    <a href="attendance.html">
+        <i class="fa-solid fa-calendar-check"></i> Attendance
+    </a>
+
+    <a href="results.html">
+        <i class="fa-solid fa-chart-column"></i> Results
+    </a>
+
+    <a href="fees.html">
+        <i class="fa-solid fa-money-bill"></i> Fees
+    </a>
+
+    <a href="notices.html">
+        <i class="fa-solid fa-bullhorn"></i> Notices
+    </a>
+
+    <div class="menu-title">SYSTEM</div>
+
+    <a href="contact.html">
+        <i class="fa-solid fa-address-book"></i> Contact
+    </a>
+
+    <button onclick="logout()" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </button>
+
+</aside>
+
+
+<div class="main-content">
+
+<header class="topbar">
+
+    <button onclick="toggleSidebar()" class="sidebar-toggle">
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="search">
+        <i class="fa-solid fa-search"></i>
+        <input type="text" placeholder="Search students...">
+    </div>
+
+    <div class="profile">
+        <div class="profile-avatar">A</div>
+        <div>
+            <strong>Admin</strong>
+            <small>Administrator</small>
+        </div>
+    </div>
+
+</header>
+
+
+<main class="page-content">
+
+    <div class="page-title">
+
+        <div>
+            <h1>Students</h1>
+            <p>Manage all registered students.</p>
+        </div>
+
+        <button class="add-btn" onclick="addStudent()">
+            <i class="fa-solid fa-plus"></i>
+            Add Student
+        </button>
+
+    </div>
+
+
+    <div class="page-card">
+
+        <div class="filter-bar">
+
+            <input
+                type="text"
+                id="studentSearch"
+                placeholder="Search student..."
+                onkeyup="searchStudents()">
+
+            <select id="classFilter"
+                    onchange="searchStudents()">
+
+                <option value="">All Classes</option>
+                <option>Grade 1</option>
+                <option>Grade 2</option>
+                <option>Grade 3</option>
+                <option>Grade 4</option>
+                <option>Grade 5</option>
+                <option>Grade 6</option>
+                <option>Grade 7</option>
+                <option>Grade 8</option>
+                <option>Grade 9</option>
+                <option>Grade 10</option>
+
+            </select>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table id="studentTable">
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Student</th>
+                        <th>Class</th>
+                        <th>Parent</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>STU001</td>
+                        <td>Aarav Rao</td>
+                        <td>Grade 8</td>
+                        <td>Raj Rao</td>
+                        <td>9876543210</td>
+                        <td>
+                            <span class="status active-status">
+                                Active
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>STU002</td>
+                        <td>Priya Shah</td>
+                        <td>Grade 10</td>
+                        <td>Meena Shah</td>
+                        <td>9876543211</td>
+                        <td>
+                            <span class="status active-status">
+                                Active
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>STU003</td>
+                        <td>Vihaan Kulkarni</td>
+                        <td>Grade 6</td>
+                        <td>Rahul Kulkarni</td>
+                        <td>9876543212</td>
+                        <td>
+                            <span class="status pending-status">
+                                Pending
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>STU004</td>
+                        <td>Anaya Patil</td>
+                        <td>Grade 5</td>
+                        <td>Sunil Patil</td>
+                        <td>9876543213</td>
+                        <td>
+                            <span class="status active-status">
+                                Active
+                            </span>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</main>
+
+</div>
+
+
+<script>
+
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("show");
+}
+
+function logout() {
+    localStorage.removeItem("loggedIn");
+    window.location.href = "login.html";
+}
+
+function addStudent() {
+
+    const name = prompt("Enter student name:");
+
+    if (!name) return;
+
+    const grade = prompt("Enter grade:");
+
+    if (!grade) return;
+
+    alert(
+        "Student " + name +
+        " added successfully to Grade " +
+        grade + "!"
+    );
+
+}
+
+function searchStudents() {
+
+    const search =
+        document.getElementById("studentSearch")
+        .value
+        .toLowerCase();
+
+    const grade =
+        document.getElementById("classFilter")
+        .value
+        .toLowerCase();
+
+    const rows =
+        document.querySelectorAll("#studentTable tbody tr");
+
+    rows.forEach(row => {
+
+        const text = row.innerText.toLowerCase();
+
+        const matchesSearch =
+            text.includes(search);
+
+        const matchesGrade =
+            !grade || text.includes(grade);
+
+        row.style.display =
+            matchesSearch && matchesGrade
+            ? ""
+            : "none";
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
