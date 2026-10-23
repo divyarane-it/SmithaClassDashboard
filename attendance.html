@@ -1,338 +1,432 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance | Smitha Classes</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 
-<title>Attendance | Smitha Classes</title>
+    <style>
+        .page-content { padding: 30px; }
+        .page-title { margin-bottom: 25px; }
+        .page-title h1 { margin-bottom: 8px; }
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+        .attendance-summary {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
 
-<link rel="stylesheet" href="css/dashboard.css">
+        .attendance-box, .attendance-table {
+            background: white;
+            padding: 24px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,.04);
+        }
 
-<style>
+        .attendance-box h2 { font-size: 30px; margin: 10px 0; }
+        .present { color: #16a34a; }
+        .absent { color: #dc2626; }
+        .leave { color: #d97706; }
 
-.page-content {
-padding:30px;
-}
+        .attendance-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin: 20px 0;
+        }
 
-.page-title {
-margin-bottom:30px;
-}
+        .attendance-toolbar input,
+        .attendance-toolbar select,
+        .attendance-toolbar button,
+        .status-select {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font: inherit;
+        }
 
-.attendance-summary {
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:20px;
-margin-bottom:25px;
-}
+        .attendance-toolbar button {
+            border: none;
+            background: #4f46e5;
+            color: white;
+            cursor: pointer;
+        }
 
-.attendance-box {
-background:white;
-padding:25px;
-border-radius:15px;
-}
+        .attendance-toolbar button:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
 
-.attendance-box h2 {
-font-size:30px;
-margin-top:8px;
-}
+        .attendance-toolbar .secondary-btn {
+            background: #475569;
+        }
 
-.present {
-color:#16a34a;
-}
+        .table-responsive { overflow-x: auto; }
+        #attendanceTable { width: 100%; border-collapse: collapse; }
+        #attendanceTable th, #attendanceTable td {
+            padding: 14px 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
 
-.absent {
-color:#dc2626;
-}
+        .status-select { min-width: 120px; background: white; }
+        .message { margin: 12px 0; font-size: 14px; }
+        .success-message { color: #15803d; }
+        .error-message { color: #b91c1c; }
 
-.leave {
-color:#d97706;
-}
-
-.attendance-table {
-background:white;
-padding:25px;
-border-radius:15px;
-}
-
-select {
-padding:10px;
-border:1px solid #ddd;
-border-radius:8px;
-}
-
-@media(max-width:700px) {
-.attendance-summary {
-grid-template-columns:1fr;
-}
-}
-
-</style>
-
+        @media (max-width: 700px) {
+            .page-content { padding: 20px 15px; }
+            .attendance-summary { grid-template-columns: 1fr; }
+            .attendance-toolbar { align-items: stretch; flex-direction: column; }
+            .attendance-toolbar input,
+            .attendance-toolbar select,
+            .attendance-toolbar button { width: 100%; }
+        }
+    </style>
 </head>
 
-
 <body>
-
-
 <aside class="sidebar" id="sidebar">
+    <div class="dashboard-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>Smitha Classes</span>
+    </div>
 
-<div class="dashboard-logo">
-<i class="fa-solid fa-graduation-cap"></i>
-<span>Smitha Classes</span>
-</div>
+    <div class="menu-title">MAIN MENU</div>
+    <a href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+    <a href="students.html"><i class="fa-solid fa-users"></i> Students</a>
+    <a href="teachers.html"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a>
+    <a href="classes.html"><i class="fa-solid fa-book"></i> Classes</a>
+    <a href="attendance.html" class="active"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+    <a href="results.html"><i class="fa-solid fa-chart-column"></i> Results</a>
+    <a href="fees.html"><i class="fa-solid fa-money-bill"></i> Fees</a>
+    <a href="notices.html"><i class="fa-solid fa-bullhorn"></i> Notices</a>
 
-<div class="menu-title">MAIN MENU</div>
-
-<a href="dashboard.html">
-<i class="fa-solid fa-house"></i> Dashboard
-</a>
-
-<a href="students.html">
-<i class="fa-solid fa-users"></i> Students
-</a>
-
-<a href="teachers.html">
-<i class="fa-solid fa-chalkboard-user"></i> Teachers
-</a>
-
-<a href="classes.html">
-<i class="fa-solid fa-book"></i> Classes
-</a>
-
-<a href="attendance.html" class="active">
-<i class="fa-solid fa-calendar-check"></i> Attendance
-</a>
-
-<a href="results.html">
-<i class="fa-solid fa-chart-column"></i> Results
-</a>
-
-<a href="fees.html">
-<i class="fa-solid fa-money-bill"></i> Fees
-</a>
-
-<a href="notices.html">
-<i class="fa-solid fa-bullhorn"></i> Notices
-</a>
-
-<div class="menu-title">SYSTEM</div>
-
-<a href="contact.html">
-<i class="fa-solid fa-address-book"></i> Contact
-</a>
-
-<button onclick="logout()" class="logout-btn">
-<i class="fa-solid fa-right-from-bracket"></i>
-Logout
-</button>
-
+    <div class="menu-title">SYSTEM</div>
+    <a href="contact.html"><i class="fa-solid fa-address-book"></i> Contact</a>
+    <button onclick="logout()" class="logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </button>
 </aside>
 
-
 <div class="main-content">
+    <header class="topbar">
+        <button onclick="toggleSidebar()" class="sidebar-toggle" aria-label="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
-<header class="topbar">
+        <div class="search">
+            <i class="fa-solid fa-search"></i>
+            <input id="studentSearch" type="text" placeholder="Search students..." oninput="renderRows()">
+        </div>
 
-<button onclick="toggleSidebar()" class="sidebar-toggle">
-<i class="fa-solid fa-bars"></i>
-</button>
+        <div class="profile">
+            <div class="profile-avatar">A</div>
+            <div><strong>Admin</strong><small>Administrator</small></div>
+        </div>
+    </header>
 
-<div class="search">
-<i class="fa-solid fa-search"></i>
-<input type="text" placeholder="Search...">
+    <main class="page-content">
+        <div class="page-title">
+            <h1>Attendance</h1>
+            <p>Mark and manage student attendance.</p>
+        </div>
+
+        <div class="attendance-summary">
+            <div class="attendance-box">
+                <span>Present</span>
+                <h2 class="present" id="presentCount">0</h2>
+                <p id="presentPercent">0% of marked records</p>
+            </div>
+            <div class="attendance-box">
+                <span>Absent</span>
+                <h2 class="absent" id="absentCount">0</h2>
+                <p id="absentPercent">0% of marked records</p>
+            </div>
+            <div class="attendance-box">
+                <span>On Leave</span>
+                <h2 class="leave" id="leaveCount">0</h2>
+                <p id="leavePercent">0% of marked records</p>
+            </div>
+        </div>
+
+        <section class="attendance-table">
+            <h3>Student Attendance</h3>
+            <p>Select a date and mark attendance for each registered student.</p>
+
+            <div class="attendance-toolbar">
+                <label for="attendanceDate">Date:</label>
+                <input type="date" id="attendanceDate">
+
+                <label for="classFilter">Class:</label>
+                <select id="classFilter" onchange="renderRows()">
+                    <option value="">All Classes</option>
+                </select>
+
+                <button type="button" class="secondary-btn" onclick="loadAttendance()">
+                    <i class="fa-solid fa-rotate"></i> Load Records
+                </button>
+
+                <button type="button" id="saveButton" onclick="saveAttendance()">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Attendance
+                </button>
+            </div>
+
+            <p id="message" class="message" role="status"></p>
+
+            <div class="table-responsive">
+                <table id="attendanceTable">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Student</th>
+                            <th>Class</th>
+                            <th>Attendance Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceRows">
+                        <tr><td colspan="4">Loading students...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 </div>
 
-<div class="profile">
-<div class="profile-avatar">A</div>
-<div>
-<strong>Admin</strong>
-<small>Administrator</small>
-</div>
-</div>
-
-</header>
-
-
-<main class="page-content">
-
-<div class="page-title">
-
-<h1>Attendance</h1>
-
-<p>
-Track student attendance.
-</p>
-
-</div>
-
-
-<div class="attendance-summary">
-
-<div class="attendance-box">
-
-<span>Present</span>
-
-<h2 class="present">
-230
-</h2>
-
-<p>92% students present</p>
-
-</div>
-
-
-<div class="attendance-box">
-
-<span>Absent</span>
-
-<h2 class="absent">
-12
-</h2>
-
-<p>5% students absent</p>
-
-</div>
-
-
-<div class="attendance-box">
-
-<span>On Leave</span>
-
-<h2 class="leave">
-8
-</h2>
-
-<p>3% students on leave</p>
-
-</div>
-
-</div>
-
-
-<div class="attendance-table">
-
-<div class="card-header">
-
-<div>
-<h3>Today's Attendance</h3>
-<p>September 3, 2026</p>
-</div>
-
-<select onchange="filterClass(this.value)">
-
-<option value="">All Classes</option>
-<option>Grade 8</option>
-<option>Grade 9</option>
-<option>Grade 10</option>
-
-</select>
-
-</div>
-
-
-<div class="table-responsive">
-
-<table id="attendanceTable">
-
-<thead>
-
-<tr>
-<th>Student</th>
-<th>Class</th>
-<th>Status</th>
-</tr>
-
-</thead>
-
-<tbody>
-
-<tr>
-<td>Aarav Rao</td>
-<td>Grade 8</td>
-<td>
-<span class="status active-status">
-Present
-</span>
-</td>
-</tr>
-
-<tr>
-<td>Priya Shah</td>
-<td>Grade 10</td>
-<td>
-<span class="status active-status">
-Present
-</span>
-</td>
-</tr>
-
-<tr>
-<td>Vihaan Kulkarni</td>
-<td>Grade 6</td>
-<td>
-<span class="status pending-status">
-Absent
-</span>
-</td>
-</tr>
-
-<tr>
-<td>Anaya Patil</td>
-<td>Grade 5</td>
-<td>
-<span class="status active-status">
-Present
-</span>
-</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-</main>
-
-</div>
-
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL = "https://xwfzfmvnqklwykkjfbkl.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2wfoAwTlLbD_l6yQWiGvCg_x5TE02Dt";
+const ADMIN_USER_ID = "9563f9b3-9893-45d1-ad4c-03b929f693a4";
 
-function toggleSidebar(){
-document.getElementById("sidebar").classList.toggle("show");
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+let students = [];
+let savedAttendance = {};
+let allowedAdmin = false;
+
+function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("show");
 }
 
-function logout(){
-localStorage.removeItem("loggedIn");
-window.location.href="login.html";
+async function logout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = "login.html";
 }
 
-function filterClass(value){
-
-const rows =
-document.querySelectorAll("#attendanceTable tbody tr");
-
-rows.forEach(row=>{
-
-row.style.display =
-!value ||
-row.children[1].innerText === value
-? ""
-: "none";
-
-});
-
+function showMessage(message, isError = false) {
+    const element = document.getElementById("message");
+    element.textContent = message;
+    element.className = "message " + (isError ? "error-message" : "success-message");
 }
 
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function todayLocal() {
+    const now = new Date();
+    const offset = now.getTimezoneOffset();
+    return new Date(now.getTime() - offset * 60000).toISOString().slice(0, 10);
+}
+
+async function checkAdmin() {
+    const { data, error } = await supabaseClient.auth.getUser();
+
+    if (error || !data.user || data.user.id !== ADMIN_USER_ID) {
+        await supabaseClient.auth.signOut();
+        window.location.href = "login.html";
+        return false;
+    }
+
+    return true;
+}
+
+async function loadStudents() {
+    showMessage("");
+
+    const { data, error } = await supabaseClient
+        .from("students")
+        .select("id, student_name, student_class, status")
+        .order("student_name");
+
+    if (error) {
+        showMessage("Could not load students: " + error.message, true);
+        document.getElementById("attendanceRows").innerHTML =
+            '<tr><td colspan="4">Unable to load student records.</td></tr>';
+        return false;
+    }
+
+    students = data || [];
+
+    const classFilter = document.getElementById("classFilter");
+    const previousClass = classFilter.value;
+    const classes = [...new Set(students.map(s => s.student_class).filter(Boolean))];
+
+    classFilter.innerHTML = '<option value="">All Classes</option>' +
+        classes.map(c => `<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join("");
+
+    if (classes.includes(previousClass)) classFilter.value = previousClass;
+
+    await loadAttendance();
+    return true;
+}
+
+async function loadAttendance() {
+    const date = document.getElementById("attendanceDate").value;
+    if (!date) {
+        showMessage("Please select an attendance date.", true);
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from("attendance")
+        .select("student_id, status")
+        .eq("attendance_date", date);
+
+    if (error) {
+        showMessage("Could not load attendance: " + error.message, true);
+        return;
+    }
+
+    savedAttendance = {};
+    (data || []).forEach(record => {
+        savedAttendance[record.student_id] = record.status;
+    });
+
+    renderRows();
+    showMessage("Attendance records loaded for " + date + ".");
+}
+
+function renderRows() {
+    const tbody = document.getElementById("attendanceRows");
+    const search = document.getElementById("studentSearch").value.toLowerCase().trim();
+    const selectedClass = document.getElementById("classFilter").value;
+
+    const filtered = students.filter(student => {
+        const matchesSearch =
+            (student.student_name || "").toLowerCase().includes(search) ||
+            String(student.id).includes(search);
+
+        return matchesSearch &&
+            (!selectedClass || student.student_class === selectedClass);
+    });
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4">No matching students found.</td></tr>';
+        updateSummary();
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(student => {
+        const status = savedAttendance[student.id] || "";
+        return `
+            <tr data-student-id="${student.id}">
+                <td>STU${String(student.id).padStart(3, "0")}</td>
+                <td>${escapeHTML(student.student_name)}</td>
+                <td>${escapeHTML(student.student_class)}</td>
+                <td>
+                    <select class="status-select" data-student-id="${student.id}"
+                            aria-label="Attendance for ${escapeHTML(student.student_name)}"
+                            onchange="updateSummary()">
+                        <option value="">Not marked</option>
+                        <option value="Present" ${status === "Present" ? "selected" : ""}>Present</option>
+                        <option value="Absent" ${status === "Absent" ? "selected" : ""}>Absent</option>
+                        <option value="Leave" ${status === "Leave" ? "selected" : ""}>Leave</option>
+                    </select>
+                </td>
+            </tr>
+        `;
+    }).join("");
+
+    updateSummary();
+}
+
+function updateSummary() {
+    const selects = [...document.querySelectorAll(".status-select")];
+    const counts = { Present: 0, Absent: 0, Leave: 0 };
+
+    selects.forEach(select => {
+        if (counts[select.value] !== undefined) counts[select.value]++;
+    });
+
+    const total = selects.length;
+    document.getElementById("presentCount").textContent = counts.Present;
+    document.getElementById("absentCount").textContent = counts.Absent;
+    document.getElementById("leaveCount").textContent = counts.Leave;
+
+    const percentage = count => total ? Math.round(count / total * 100) : 0;
+    document.getElementById("presentPercent").textContent = percentage(counts.Present) + "% of visible students";
+    document.getElementById("absentPercent").textContent = percentage(counts.Absent) + "% of visible students";
+    document.getElementById("leavePercent").textContent = percentage(counts.Leave) + "% of visible students";
+}
+
+async function saveAttendance() {
+    if (!allowedAdmin) {
+        showMessage("Please log in as the administrator.", true);
+        return;
+    }
+
+    const date = document.getElementById("attendanceDate").value;
+    if (!date) {
+        showMessage("Please select a date.", true);
+        return;
+    }
+
+    const selects = [...document.querySelectorAll(".status-select")];
+    const records = selects
+        .filter(select => select.value)
+        .map(select => ({
+            student_id: Number(select.dataset.studentId),
+            attendance_date: date,
+            status: select.value
+        }));
+
+    if (records.length === 0) {
+        showMessage("Mark at least one student's attendance before saving.", true);
+        return;
+    }
+
+    const button = document.getElementById("saveButton");
+    button.disabled = true;
+
+    const { error } = await supabaseClient
+        .from("attendance")
+        .upsert(records, { onConflict: "student_id,attendance_date" });
+
+    button.disabled = false;
+
+    if (error) {
+        showMessage("Could not save attendance: " + error.message, true);
+        return;
+    }
+
+    showMessage("Attendance saved successfully for " + date + ".");
+    await loadAttendance();
+}
+
+document.getElementById("attendanceDate").value = todayLocal();
+document.getElementById("attendanceDate").addEventListener("change", loadAttendance);
+
+(async function initAttendancePage() {
+    allowedAdmin = await checkAdmin();
+    if (allowedAdmin) await loadStudents();
+})();
 </script>
-
 </body>
 </html>

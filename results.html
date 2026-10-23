@@ -1,241 +1,365 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Results | Smitha Classes</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <link rel="stylesheet" href="css/dashboard.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-
-.page-content {
-padding:30px;
+.page-content{padding:30px}
+.page-title{margin-bottom:25px}
+.result-card{background:white;padding:25px;border-radius:15px;margin-bottom:22px}
+.card-header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:20px}
+.marks{font-weight:800;color:#4f46e5}
+.excellent{color:#16a34a;font-weight:700}
+.result-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:20px}
+.result-form label{display:flex;flex-direction:column;gap:7px;font-weight:600;font-size:14px}
+.result-form input,.result-form select,.card-header select,.filters input,.filters select{padding:11px;border:1px solid #ddd;border-radius:8px;font:inherit;max-width:100%}
+.result-form .full{grid-column:1/-1}
+.primary-btn{background:#4f46e5;color:white;border:0;border-radius:8px;padding:11px 16px;cursor:pointer}
+.primary-btn:disabled{opacity:.6;cursor:wait}
+.filters{display:flex;gap:12px;flex-wrap:wrap;margin:15px 0}
+.filters input{flex:1;min-width:180px}
+.table-responsive{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{padding:13px;text-align:left;border-bottom:1px solid #eee}
+th{background:#f8fafc}
+#message{margin:12px 0}
+.grade-badge{font-weight:700;color:#16a34a}
+@media(max-width:700px){
+ .page-content{padding:18px}
+ .result-form{grid-template-columns:1fr}
+ .result-form .full{grid-column:auto}
 }
-
-.page-title {
-margin-bottom:30px;
-}
-
-.result-card {
-background:white;
-padding:25px;
-border-radius:15px;
-}
-
-.marks {
-font-weight:800;
-color:#4f46e5;
-}
-
-.excellent {
-color:#16a34a;
-font-weight:700;
-}
-
 </style>
-
 </head>
 
-
 <body>
-
-
 <aside class="sidebar" id="sidebar">
-
-<div class="dashboard-logo">
-<i class="fa-solid fa-graduation-cap"></i>
-<span>Smitha Classes</span>
-</div>
-
-<div class="menu-title">MAIN MENU</div>
-
-<a href="dashboard.html">
-<i class="fa-solid fa-house"></i> Dashboard
-</a>
-
-<a href="students.html">
-<i class="fa-solid fa-users"></i> Students
-</a>
-
-<a href="teachers.html">
-<i class="fa-solid fa-chalkboard-user"></i> Teachers
-</a>
-
-<a href="classes.html">
-<i class="fa-solid fa-book"></i> Classes
-</a>
-
-<a href="attendance.html">
-<i class="fa-solid fa-calendar-check"></i> Attendance
-</a>
-
-<a href="results.html" class="active">
-<i class="fa-solid fa-chart-column"></i> Results
-</a>
-
-<a href="fees.html">
-<i class="fa-solid fa-money-bill"></i> Fees
-</a>
-
-<a href="notices.html">
-<i class="fa-solid fa-bullhorn"></i> Notices
-</a>
-
-<div class="menu-title">SYSTEM</div>
-
-<a href="contact.html">
-<i class="fa-solid fa-address-book"></i> Contact
-</a>
-
-<button onclick="logout()" class="logout-btn">
-<i class="fa-solid fa-right-from-bracket"></i>
-Logout
-</button>
-
+  <div class="dashboard-logo"><i class="fa-solid fa-graduation-cap"></i><span>Smitha Classes</span></div>
+  <div class="menu-title">MAIN MENU</div>
+  <a href="dashboard.html"><i class="fa-solid fa-house"></i> Dashboard</a>
+  <a href="students.html"><i class="fa-solid fa-users"></i> Students</a>
+  <a href="teachers.html"><i class="fa-solid fa-chalkboard-user"></i> Teachers</a>
+  <a href="classes.html"><i class="fa-solid fa-book"></i> Classes</a>
+  <a href="attendance.html"><i class="fa-solid fa-calendar-check"></i> Attendance</a>
+  <a href="results.html" class="active"><i class="fa-solid fa-chart-column"></i> Results</a>
+  <a href="fees.html"><i class="fa-solid fa-money-bill"></i> Fees</a>
+  <a href="notices.html"><i class="fa-solid fa-bullhorn"></i> Notices</a>
+  <div class="menu-title">SYSTEM</div>
+  <a href="contact.html"><i class="fa-solid fa-address-book"></i> Contact</a>
+  <button onclick="logout()" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
 </aside>
 
-
 <div class="main-content">
-
 <header class="topbar">
-
-<button onclick="toggleSidebar()" class="sidebar-toggle">
-<i class="fa-solid fa-bars"></i>
-</button>
-
-<div class="search">
-<i class="fa-solid fa-search"></i>
-<input type="text" placeholder="Search results...">
-</div>
-
-<div class="profile">
-<div class="profile-avatar">A</div>
-<div>
-<strong>Admin</strong>
-<small>Administrator</small>
-</div>
-</div>
-
+  <button onclick="toggleSidebar()" class="sidebar-toggle"><i class="fa-solid fa-bars"></i></button>
+  <div class="search"><i class="fa-solid fa-search"></i><input id="topSearch" type="text" placeholder="Search results..."></div>
+  <div class="profile"><div class="profile-avatar">A</div><div><strong>Admin</strong><small>Administrator</small></div></div>
 </header>
 
-
 <main class="page-content">
+  <div class="page-title">
+    <h1>Results</h1>
+    <p>View and manage student academic performance.</p>
+  </div>
 
-<div class="page-title">
+  <p id="message" role="status">Loading results...</p>
 
-<h1>Results</h1>
+  <section class="result-card">
+    <div class="card-header">
+      <div><h3>Add or Update Results</h3><p>Term 1 · Academic Year 2026–27</p></div>
+    </div>
 
-<p>
-View and manage student academic performance.
-</p>
+    <form id="resultForm" class="result-form">
+      <label class="full">Student
+        <select id="studentSelect" required>
+          <option value="">Loading students...</option>
+        </select>
+      </label>
+      <label>Mathematics (out of 100)
+        <input id="maths" type="number" min="0" max="100" step="1" required value="0">
+      </label>
+      <label>Science (out of 100)
+        <input id="science" type="number" min="0" max="100" step="1" required value="0">
+      </label>
+      <label>English (out of 100)
+        <input id="english" type="number" min="0" max="100" step="1" required value="0">
+      </label>
+      <div class="full">
+        <p>Total: <strong id="previewTotal">0 / 300</strong> · Percentage: <strong id="previewPercentage">0%</strong> · Grade: <strong id="previewGrade">F</strong></p>
+        <button id="saveButton" class="primary-btn" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save Results</button>
+      </div>
+    </form>
+  </section>
 
-</div>
+  <section class="result-card">
+    <div class="card-header">
+      <div><h3>Term 1 Results</h3><p>Saved student marks</p></div>
+      <select id="classFilter">
+        <option value="all">All Classes</option>
+      </select>
+    </div>
 
+    <div class="filters">
+      <input id="tableSearch" type="text" placeholder="Search by student or class...">
+    </div>
 
-<div class="result-card">
-
-<div class="card-header">
-
-<div>
-<h3>Term 1 Results</h3>
-<p>Academic Year 2026-27</p>
-</div>
-
-<select>
-
-<option>All Classes</option>
-<option>Grade 8</option>
-<option>Grade 9</option>
-<option>Grade 10</option>
-
-</select>
-
-</div>
-
-
-<div class="table-responsive">
-
-<table>
-
-<thead>
-
-<tr>
-<th>Student</th>
-<th>Class</th>
-<th>Mathematics</th>
-<th>Science</th>
-<th>English</th>
-<th>Total</th>
-<th>Grade</th>
-</tr>
-
-</thead>
-
-
-<tbody>
-
-<tr>
-<td>Aarav Rao</td>
-<td>Grade 8</td>
-<td class="marks">92</td>
-<td class="marks">88</td>
-<td class="marks">90</td>
-<td>270/300</td>
-<td class="excellent">A+</td>
-</tr>
-
-<tr>
-<td>Priya Shah</td>
-<td>Grade 10</td>
-<td class="marks">95</td>
-<td class="marks">93</td>
-<td class="marks">91</td>
-<td>279/300</td>
-<td class="excellent">A+</td>
-</tr>
-
-<tr>
-<td>Vihaan Kulkarni</td>
-<td>Grade 6</td>
-<td class="marks">78</td>
-<td class="marks">82</td>
-<td class="marks">80</td>
-<td>240/300</td>
-<td class="excellent">A</td>
-</tr>
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th><th>Class</th><th>Mathematics</th><th>Science</th>
+            <th>English</th><th>Total</th><th>Percentage</th><th>Grade</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="resultRows">
+          <tr><td colspan="9">Loading results...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </main>
-
 </div>
-
 
 <script>
+const SUPABASE_URL = "https://xwfzfmvnqklwykkjfbkl.supabase.co";
+const SUPABASE_KEY = "sb_publishable_2wfoAwTlLbD_l6yQWiGvCg_x5TE02Dt";
+const ADMIN_USER_ID = "9563f9b3-9893-45d1-ad4c-03b929f693a4";
+
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let students = [];
+let resultsByStudent = {};
 
 function toggleSidebar(){
-document.getElementById("sidebar").classList.toggle("show");
+  document.getElementById("sidebar").classList.toggle("show");
 }
 
-function logout(){
-localStorage.removeItem("loggedIn");
-window.location.href="login.html";
+async function logout(){
+  await db.auth.signOut();
+  window.location.href = "login.html";
 }
 
+function showMessage(message, isError = false){
+  const el = document.getElementById("message");
+  el.textContent = message;
+  el.style.color = isError ? "#dc2626" : "#166534";
+}
+
+async function checkAdmin(){
+  const {data:{user}, error} = await db.auth.getUser();
+  if(error || !user || user.id !== ADMIN_USER_ID){
+    window.location.href = "login.html";
+    return false;
+  }
+  return true;
+}
+
+function gradeFor(percentage){
+  if(percentage >= 90) return "A+";
+  if(percentage >= 80) return "A";
+  if(percentage >= 70) return "B";
+  if(percentage >= 60) return "C";
+  if(percentage >= 40) return "D";
+  return "F";
+}
+
+function getMarks(){
+  return {
+    mathematics: Number(document.getElementById("maths").value),
+    science: Number(document.getElementById("science").value),
+    english: Number(document.getElementById("english").value)
+  };
+}
+
+function renderPreview(){
+  const m = getMarks();
+  const total = m.mathematics + m.science + m.english;
+  const percentage = total / 3;
+  document.getElementById("previewTotal").textContent = total + " / 300";
+  document.getElementById("previewPercentage").textContent = percentage.toFixed(2) + "%";
+  document.getElementById("previewGrade").textContent = gradeFor(percentage);
+}
+
+async function loadResults(){
+  const [studentResult, resultResult] = await Promise.all([
+    db.from("students").select("id, student_name, student_class").order("student_name"),
+    db.from("student_results").select("id, student_id, mathematics, science, english")
+  ]);
+
+  if(studentResult.error) throw studentResult.error;
+  if(resultResult.error) throw resultResult.error;
+
+  students = studentResult.data || [];
+  resultsByStudent = {};
+
+  (resultResult.data || []).forEach(result => {
+    resultsByStudent[String(result.student_id)] = result;
+  });
+
+  const classSelect = document.getElementById("classFilter");
+  const previousClass = classSelect.value;
+  const classes = [...new Set(students.map(s => s.student_class).filter(Boolean))].sort();
+  classSelect.innerHTML = '<option value="all">All Classes</option>';
+
+  classes.forEach(cls => {
+    const option = document.createElement("option");
+    option.value = cls;
+    option.textContent = cls;
+    classSelect.appendChild(option);
+  });
+
+  if(classes.includes(previousClass)) classSelect.value = previousClass;
+
+  const studentSelect = document.getElementById("studentSelect");
+  const previousStudent = studentSelect.value;
+  studentSelect.innerHTML = '<option value="">Choose a student</option>';
+
+  students.forEach(student => {
+    const option = document.createElement("option");
+    option.value = student.id;
+    option.textContent = student.student_name + " — " + student.student_class;
+    studentSelect.appendChild(option);
+  });
+
+  if(students.some(s => String(s.id) === previousStudent)){
+    studentSelect.value = previousStudent;
+  }
+
+  renderTable();
+}
+
+function renderTable(){
+  const query = document.getElementById("tableSearch").value.trim().toLowerCase();
+  const selectedClass = document.getElementById("classFilter").value;
+  const tbody = document.getElementById("resultRows");
+  tbody.innerHTML = "";
+
+  const filtered = students.filter(student => {
+    const matchesText = (student.student_name + " " + student.student_class).toLowerCase().includes(query);
+    const matchesClass = selectedClass === "all" || student.student_class === selectedClass;
+    return matchesText && matchesClass && Boolean(resultsByStudent[String(student.id)]);
+  });
+
+  if(!filtered.length){
+    tbody.innerHTML = '<tr><td colspan="9">No saved results match your search. Add results using the form above.</td></tr>';
+    return;
+  }
+
+  filtered.forEach(student => {
+    const result = resultsByStudent[String(student.id)];
+    const total = Number(result.mathematics) + Number(result.science) + Number(result.english);
+    const percentage = total / 3;
+    const grade = gradeFor(percentage);
+    const tr = document.createElement("tr");
+
+    [
+      student.student_name, student.student_class,
+      result.mathematics, result.science, result.english,
+      total + " / 300", percentage.toFixed(2) + "%"
+    ].forEach((value, index) => {
+      const td = document.createElement("td");
+      td.textContent = value;
+      if(index >= 2 && index <= 4) td.className = "marks";
+      tr.appendChild(td);
+    });
+
+    const gradeTd = document.createElement("td");
+    gradeTd.textContent = grade;
+    gradeTd.className = "grade-badge";
+    tr.appendChild(gradeTd);
+
+    const actionTd = document.createElement("td");
+    const editButton = document.createElement("button");
+    editButton.type = "button";
+    editButton.className = "primary-btn";
+    editButton.textContent = "Edit";
+    editButton.addEventListener("click", () => {
+      document.getElementById("studentSelect").value = student.id;
+      document.getElementById("maths").value = result.mathematics;
+      document.getElementById("science").value = result.science;
+      document.getElementById("english").value = result.english;
+      renderPreview();
+      document.getElementById("resultForm").scrollIntoView({behavior:"smooth", block:"center"});
+    });
+    actionTd.appendChild(editButton);
+    tr.appendChild(actionTd);
+    tbody.appendChild(tr);
+  });
+}
+
+["maths","science","english"].forEach(id => {
+  document.getElementById(id).addEventListener("input", renderPreview);
+});
+
+document.getElementById("resultForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  const studentId = document.getElementById("studentSelect").value;
+  const marks = getMarks();
+
+  if(!studentId){
+    showMessage("Please select a student.", true);
+    return;
+  }
+
+  if(Object.values(marks).some(mark => !Number.isInteger(mark) || mark < 0 || mark > 100)){
+    showMessage("Each subject mark must be a whole number from 0 to 100.", true);
+    return;
+  }
+
+  const saveButton = document.getElementById("saveButton");
+  saveButton.disabled = true;
+  showMessage("Saving results...");
+
+  const {error} = await db.from("student_results").upsert({
+    student_id: Number(studentId),
+    mathematics: marks.mathematics,
+    science: marks.science,
+    english: marks.english,
+    updated_at: new Date().toISOString()
+  }, {onConflict:"student_id"});
+
+  saveButton.disabled = false;
+
+  if(error){
+    console.error(error);
+    showMessage("Could not save results: " + error.message, true);
+    return;
+  }
+
+  try{
+    await loadResults();
+    showMessage("Results saved successfully!");
+  }catch(error){
+    console.error(error);
+    showMessage("Saved, but could not refresh the results: " + error.message, true);
+  }
+});
+
+document.getElementById("tableSearch").addEventListener("input", renderTable);
+document.getElementById("classFilter").addEventListener("change", renderTable);
+document.getElementById("topSearch").addEventListener("input", event => {
+  document.getElementById("tableSearch").value = event.target.value;
+  renderTable();
+});
+
+(async function init(){
+  if(!(await checkAdmin())) return;
+  try{
+    await loadResults();
+    renderPreview();
+    showMessage("Results loaded. Select a student to add or edit marks.");
+  }catch(error){
+    console.error(error);
+    showMessage("Could not load results: " + error.message, true);
+  }
+})();
 </script>
-
 </body>
 </html>

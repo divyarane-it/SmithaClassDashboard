@@ -223,61 +223,13 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
                 </thead>
 
-                <tbody>
+                
+<tbody id="studentRows">
+    <tr>
+        <td colspan="6">Loading students...</td>
+    </tr>
+</tbody>
 
-                    <tr>
-                        <td>STU001</td>
-                        <td>Aarav Rao</td>
-                        <td>Grade 8</td>
-                        <td>Raj Rao</td>
-                        <td>9876543210</td>
-                        <td>
-                            <span class="status active-status">
-                                Active
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>STU002</td>
-                        <td>Priya Shah</td>
-                        <td>Grade 10</td>
-                        <td>Meena Shah</td>
-                        <td>9876543211</td>
-                        <td>
-                            <span class="status active-status">
-                                Active
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>STU003</td>
-                        <td>Vihaan Kulkarni</td>
-                        <td>Grade 6</td>
-                        <td>Rahul Kulkarni</td>
-                        <td>9876543212</td>
-                        <td>
-                            <span class="status pending-status">
-                                Pending
-                            </span>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>STU004</td>
-                        <td>Anaya Patil</td>
-                        <td>Grade 5</td>
-                        <td>Sunil Patil</td>
-                        <td>9876543213</td>
-                        <td>
-                            <span class="status active-status">
-                                Active
-                            </span>
-                        </td>
-                    </tr>
-
-                </tbody>
 
             </table>
 
@@ -290,70 +242,185 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 </div>
 
 
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+const SUPABASE_URL = "https://xwfzfmvnqklwykkjfbkl.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_2wfoAwTlLbD_l6yQWiGvCg_x5TE02Dt";
+
+const ADMIN_USER_ID = "9563f9b3-9893-45d1-ad4c-03b929f693a4";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
 
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("show");
 }
 
-function logout() {
-    localStorage.removeItem("loggedIn");
+async function logout() {
+    await supabaseClient.auth.signOut();
     window.location.href = "login.html";
 }
 
-function addStudent() {
+// Check admin login before accessing student records
+async function checkAdmin() {
+    const { data, error } = await supabaseClient.auth.getUser();
 
+    if (error || !data.user || data.user.id !== ADMIN_USER_ID) {
+        await supabaseClient.auth.signOut();
+        window.location.href = "login.html";
+        return false;
+    }
+
+    return true;
+}
+
+// Load student records from Supabase
+async function loadStudents() {
+    const tbody = document.getElementById("studentRows");
+
+    tbody.innerHTML =
+        '<tr><td colspan="6">Loading students...</td></tr>';
+
+    const { data, error } = await supabaseClient
+        .from("students")
+        .select("id, student_name, student_class, parent_name, phone, status")
+        .order("id", { ascending: true });
+
+    if (error) {
+        tbody.innerHTML =
+            '<tr><td colspan="6">Could not load students: ' +
+            escapeHTML(error.message) + '</td></tr>';
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        tbody.innerHTML =
+            '<tr><td colspan="6">No students added yet.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = data.map(student => {
+        const statusClass = {
+            Active: "active-status",
+            Pending: "pending-status",
+            Inactive: "inactive-status"
+        }[student.status] || "";
+
+        return `
+            <tr>
+                <td>STU${String(student.id).padStart(3, "0")}</td>
+                <td>${escapeHTML(student.student_name)}</td>
+                <td>${escapeHTML(student.student_class)}</td>
+                <td>${escapeHTML(student.parent_name || "-")}</td>
+                <td>${escapeHTML(student.phone || "-")}</td>
+                <td>
+                    <span class="status ${statusClass}">
+                        ${escapeHTML(student.status)}
+                    </span>
+                </td>
+            </tr>
+        `;
+    }).join("");
+
+    searchStudents();
+}
+
+// Prevent database text from being interpreted as HTML
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+// Add a student to the database
+async function addStudent() {
     const name = prompt("Enter student name:");
+    if (!name || !name.trim()) return;
 
-    if (!name) return;
+    const studentClass = prompt(
+        "Enter class (example: Grade 8):"
+    );
+    if (!studentClass || !studentClass.trim()) return;
 
-    const grade = prompt("Enter grade:");
+    const parent = prompt("Enter parent name (optional):");
+    const phone = prompt("Enter phone number (optional):");
 
-    if (!grade) return;
-
-    alert(
-        "Student " + name +
-        " added successfully to Grade " +
-        grade + "!"
+    const statusInput = prompt(
+        "Enter status: Active, Pending, or Inactive",
+        "Active"
     );
 
+    if (statusInput === null) return;
+
+    const status = statusInput.trim().toLowerCase();
+    const validStatuses = {
+        active: "Active",
+        pending: "Pending",
+        inactive: "Inactive"
+    };
+
+    if (!validStatuses[status]) {
+        alert("Please enter Active, Pending, or Inactive.");
+        return;
+    }
+
+    const { error } = await supabaseClient
+        .from("students")
+        .insert({
+            student_name: name.trim(),
+            student_class: studentClass.trim(),
+            parent_name: parent?.trim() || null,
+            phone: phone?.trim() || null,
+            status: validStatuses[status]
+        });
+
+    if (error) {
+        alert("Could not add student: " + error.message);
+        return;
+    }
+
+    alert("Student added successfully!");
+    await loadStudents();
 }
 
+// Search students and filter by class
 function searchStudents() {
+    const search = document
+        .getElementById("studentSearch")
+        .value.toLowerCase().trim();
 
-    const search =
-        document.getElementById("studentSearch")
-        .value
-        .toLowerCase();
+    const grade = document
+        .getElementById("classFilter")
+        .value.toLowerCase().trim();
 
-    const grade =
-        document.getElementById("classFilter")
-        .value
-        .toLowerCase();
-
-    const rows =
-        document.querySelectorAll("#studentTable tbody tr");
-
-    rows.forEach(row => {
-
+    document.querySelectorAll("#studentRows tr").forEach(row => {
         const text = row.innerText.toLowerCase();
-
-        const matchesSearch =
-            text.includes(search);
-
+        const matchesSearch = text.includes(search);
         const matchesGrade =
-            !grade || text.includes(grade);
+            !grade || row.cells[2]?.innerText.toLowerCase() === grade;
 
         row.style.display =
-            matchesSearch && matchesGrade
-            ? ""
-            : "none";
-
+            matchesSearch && matchesGrade ? "" : "none";
     });
-
 }
 
-</script>
+// Start only after confirming the admin session
+(async function initStudentsPage() {
+    const allowed = await checkAdmin();
 
+    if (allowed) {
+        await loadStudents();
+    }
+})();
+</script>
 </body>
 </html>

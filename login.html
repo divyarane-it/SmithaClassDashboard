@@ -1,166 +1,118 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Smitha Classes</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Login | Smitha Classes</title>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
-<link rel="stylesheet" href="css/dashboard.css">
-
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 
 <body class="login-page">
-
 <div class="login-container">
 
     <div class="login-left">
-
         <div class="login-logo">
             <i class="fa-solid fa-graduation-cap"></i>
             Smitha Classes
         </div>
 
-        <h1>
-            Welcome Back! 👋
-        </h1>
-
-        <p>
-            Access your Smitha Classes management dashboard
-            and manage your academic activities.
-        </p>
+        <h1>Welcome Back! 👋</h1>
+        <p>Access your Smitha Classes management dashboard
+           and manage your academic activities.</p>
 
         <div class="login-benefits">
-
-            <div>
-                <i class="fa-solid fa-users"></i>
-                Student Management
-            </div>
-
-            <div>
-                <i class="fa-solid fa-chart-line"></i>
-                Academic Analytics
-            </div>
-
-            <div>
-                <i class="fa-solid fa-calendar-check"></i>
-                Attendance Tracking
-            </div>
-
+            <div><i class="fa-solid fa-users"></i> Student Management</div>
+            <div><i class="fa-solid fa-chart-line"></i> Academic Analytics</div>
+            <div><i class="fa-solid fa-calendar-check"></i> Attendance Tracking</div>
         </div>
-
     </div>
-
 
     <div class="login-box">
-
-        <div class="login-icon">
-            <i class="fa-solid fa-lock"></i>
-        </div>
-
+        <div class="login-icon"><i class="fa-solid fa-lock"></i></div>
         <h2>Sign In</h2>
+        <p>Enter your admin details to continue</p>
 
-        <p>Enter your details to continue</p>
-
-        <form onsubmit="loginUser(event)">
-
-            <label>Email Address</label>
-
+        <form id="loginForm">
+            <label for="email">Email Address</label>
             <div class="input-group">
-
                 <i class="fa-solid fa-envelope"></i>
-
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="admin@example.com"
-                    required>
-
+                <input type="email" id="email"
+                       placeholder="Your admin email" required>
             </div>
 
-
-            <label>Password</label>
-
+            <label for="password">Password</label>
             <div class="input-group">
-
                 <i class="fa-solid fa-lock"></i>
-
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter password"
-                    required>
-
+                <input type="password" id="password"
+                       placeholder="Enter your password" required>
             </div>
 
+            <p id="loginMessage" role="status" aria-live="polite"></p>
 
-            <div class="remember">
-
-                <label>
-                    <input type="checkbox">
-                    Remember me
-                </label>
-
-                <a href="#">Forgot Password?</a>
-
-            </div>
-
-
-            <button class="login-submit">
-                Login
-                <i class="fa-solid fa-arrow-right"></i>
+            <button class="login-submit" id="loginButton" type="submit">
+                Login <i class="fa-solid fa-arrow-right"></i>
             </button>
-
         </form>
 
-        <p class="demo-login">
-            Demo: admin@smithaclasses.com / 123456
-        </p>
-
-        <a href="index.html" class="back-home">
-            ← Back to Website
-        </a>
-
+        <a href="index.html" class="back-home">← Back to Website</a>
     </div>
-
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+    // Replace these with your Supabase Project URL and publishable key.
+    const SUPABASE_URL = "https://xwfzfmvnqklwykkjfbkl.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_2wfoAwTlLbD_l6yQWiGvCg_x5TE02Dt";
 
-function loginUser(event) {
+    const supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
 
-    event.preventDefault();
+    const form = document.getElementById("loginForm");
+    const message = document.getElementById("loginMessage");
+    const button = document.getElementById("loginButton");
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault();
 
-    if (
-        (email === "admin@smithaclasses.com" ||
-         email === "admin@example.com")
-        && password === "123456"
-    ) {
+        message.textContent = "";
+        button.disabled = true;
 
-        localStorage.setItem("loggedIn", "true");
+        try {
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: document.getElementById("email").value.trim(),
+                    password: document.getElementById("password").value
+                });
 
-        window.location.href = "dashboard.html";
+            if (error) throw error;
 
-    } else {
+            if (!data.user) {
+                throw new Error("Login could not be completed.");
+            }
 
-        alert(
-            "Invalid login!\n\nDemo Login:\nEmail: admin@smithaclasses.com\nPassword: 123456"
-        );
+            // Only the specific administrator is allowed into the dashboard.
+            const ADMIN_USER_ID = "9563f9b3-9893-45d1-ad4c-03b929f693a4";
 
-    }
+            if (data.user.id !== ADMIN_USER_ID) {
+                await supabaseClient.auth.signOut();
+                throw new Error("This account is not authorized as the administrator.");
+            }
 
-}
+            window.location.href = "dashboard.html";
 
+        } catch (error) {
+            message.textContent = error.message ||
+                "Login failed. Please check your details.";
+        } finally {
+            button.disabled = false;
+        }
+    });
 </script>
-
 </body>
 </html>
